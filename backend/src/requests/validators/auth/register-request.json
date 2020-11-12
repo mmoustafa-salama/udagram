@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "register",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.+-]+$",
+      "minLength": 5,
+      "maxLength": 20
+    },
+    "email": {
+      "type": "string",
+      "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+      "minLength": 5,
+      "maxLength": 50
+    },
+    "password": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 50
+    }
+  },
+  "required": [
+    "name",
+    "email",
+    "password"
+  ],
+  "additionalProperties": false
+}

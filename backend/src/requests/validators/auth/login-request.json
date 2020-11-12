@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "login",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+      "minLength": 5,
+      "maxLength": 50
+    },
+    "password": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 50
+    }
+  },
+  "required": [
+    "email",
+    "password"
+  ],
+  "additionalProperties": false
+}
