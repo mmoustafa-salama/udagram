@@ -4,7 +4,7 @@
   "description": "Serverless Udagram (instagrame-like image sharing app)",
   "main": "handler.js",
   "dependencies": {
-    "source-map-support": "^0.5.10"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
