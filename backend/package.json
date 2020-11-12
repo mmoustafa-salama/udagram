@@ -4,10 +4,14 @@
   "description": "Serverless Udagram (instagrame-like image sharing app)",
   "main": "handler.js",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
+    "source-map-support": "^0.5.11",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^10.12.18",
     "@types/serverless": "^1.72.5",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
