@@ -1,0 +1,828 @@
+{
+	"info": {
+		"_postman_id": "2089d0a3-d030-47b0-a2ce-4ff78a80e7a2",
+		"name": "Udagram",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Serverless",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register - valid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ed05edc5-1afc-43c5-8901-8955b9175dc1",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"A token is returned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.token).to.not.eql(null);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"hello\",\n\t\"email\":\"hello@gmail.com\",\n\t\"password\":\"fancypass\"\n}"
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/users/register",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Regidter - invalid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1bfbd5d1-cfb4-49a0-9ea3-99ee8dde7202",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"auth is false and a message is included in the error body\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.not.eql(null);",
+											"    pm.expect(jsonData.message).to.not.eql(null)",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"password\": \"fancypass\"\n}"
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/users/register",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login - valid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "96e8f2de-af2f-4918-8dc0-ab8022395d64",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"body includes an email and token\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.auth).to.eql(true);",
+											"    pm.expect(jsonData.user).to.not.eql(null);",
+											"    pm.expect(jsonData.token).to.not.eql(null)",
+											"    ",
+											"    pm.environment.set(\"token\", jsonData.token);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\":\"hello@gmail.com\",\n\t\"password\":\"fancypass\"\n}"
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/users/login",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login - invalid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2c175801-54b3-428e-8115-e10cfffaabbb",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"auth is false and a message is included in the error body\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.not.eql(null);",
+											"    pm.expect(jsonData.message).to.not.eql(null)",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/users/login",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Feeds",
+					"item": [
+						{
+							"name": "/feeds",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a4c30633-a73b-4e52-9c17-f15d47d05571",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The count is equal to the number of items rx\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.count).to.eql(jsonData.rows.length);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 600ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(600);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds"
+									]
+								},
+								"description": "Get all the items in the feed"
+							},
+							"response": []
+						},
+						{
+							"name": "/feeds/:id - not found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "308e54b8-d06b-416b-8b6b-77ff920b7692",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"A single item is returned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.not.eql(null);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/:id",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "a2d5eacb-f54d-4853-b810-9049100a56ee"
+										}
+									]
+								},
+								"description": "Request a specific feed item detail"
+							},
+							"response": [
+								{
+									"name": "/api/v0/feed/:id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/v0/feed/:id",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v0",
+												"feed",
+												":id"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "4",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "133"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 26 Mar 2019 15:07:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "/feeds/:id patch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "39cd9c98-153f-41ea-ba1c-feee31953031",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"A single item is returned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.not.eql(null);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"caption\": \"Does size matter safety and the small car?!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/:id",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										":id"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "a2d5eacb-f54d-4853-b810-9049100a56ee",
+											"type": "string"
+										}
+									]
+								},
+								"description": "Update a specific feed item"
+							},
+							"response": [
+								{
+									"name": "/api/v0/feed/:id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/v0/feed/:id",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v0",
+												"feed",
+												":id"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "4",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "133"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 26 Mar 2019 15:07:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "/feeds post",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7a4be40c-2555-4054-850c-7e9a7c692d7e",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"A single item is returned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.not.eql(null);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"caption\": \"Does size matter safety and the small car?\",\r\n    \"url\": \"van-336606_1280.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Create a new feed item"
+							},
+							"response": [
+								{
+									"name": "/api/v0/feed/:id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/v0/feed/:id",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v0",
+												"feed",
+												":id"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "4",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "133"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 26 Mar 2019 15:07:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "/feeds/upload-url/:fileName",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/upload-url/:fileName",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										"upload-url",
+										":fileName"
+									],
+									"variable": [
+										{
+											"key": "fileName",
+											"value": "van-336606_1280.jpg"
+										}
+									]
+								},
+								"description": "Get S3 signed url for a specific file"
+							},
+							"response": []
+						},
+						{
+							"name": "/feeds/:id - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/:id",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "ad643abc-5bc0-434e-8b05-f625742c5a35"
+										}
+									]
+								},
+								"description": "Delete a specific feed item"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "34010d71-0c7b-460c-b6eb-27cb9608f107",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8d560a76-860c-48d4-85f9-0434cc4baa4a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f25b5da5-8223-4476-93f6-66501cb046f1",
+			"key": "appId",
+			"value": "48y1ovuyfh"
+		},
+		{
+			"id": "df35bfc5-293b-4f0f-8730-f44b3e341dc7",
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsInBhc3N3b3JkX2hhc2giOiIkMmIkMTAkNElrejRmTGV0N2NnYlUwbmtMMmhJT1J5RDhTeElFdXFDQTNJajltekZsUXZBcEQwY3g2eU8iLCJjcmVhdGVkQXQiOiIyMDIwLTA5LTE4VDAxOjM3OjQwLjI3M1oiLCJ1cGRhdGVkQXQiOiIyMDIwLTA5LTE4VDAxOjM3OjQwLjI3NFoiLCJpYXQiOjE2MDAzOTY5NTh9.SD18h4vXbkfzvdug4WDGwBOqIOakTw29wZe3eT-KDaE"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

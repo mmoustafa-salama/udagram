@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "feed-item",
+  "type": "object",
+  "properties": {
+    "caption": {
+      "type": "string",
+      "pattern": "^(?!\\s*$).+",
+      "maxLength": 255
+    }
+  },
+  "required": [
+    "caption"
+  ],
+  "additionalProperties": false
+}
