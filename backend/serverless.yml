@@ -54,6 +54,15 @@ custom:
       - name: UpdateFeedItemRequest
         contentType: application/json
         schema: ${file(src/requests/validators/update-feed-item-request.json)}
+      - name: CreateCommentRequest
+        contentType: application/json
+        schema: ${file(src/requests/validators/create-comment-request.json)}
+      - name: UpdateCommentRequest
+        contentType: application/json
+        schema: ${file(src/requests/validators/update-comment-request.json)}
+      - name: LikeRequest
+        contentType: application/json
+        schema: ${file(src/requests/validators/like-request.json)}
 
 functions:
   
@@ -206,6 +215,173 @@ functions:
           - s3:GetObject
         Resource: arn:aws:s3:::${self:provider.environment.FEEDITEM_IMAGES_S3_BUCKET}/*
 
+  # Configure CreateComment function
+  CreateComment:
+    handler: src/lambda/http/createComment.handler
+    events:
+      - http:
+          method: post
+          path: feeds/comments
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new comment
+            description: Create a new comment
+            requestModels:
+              'application/json': CreateCommentRequest
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}/index/${self:provider.environment.FEEDITEMS_INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_COMMENTS_TABLE}
+
+  # Configure GetComments function
+  GetComments:
+    handler: src/lambda/http/getComments.handler
+    events:
+      - http:
+          method: get
+          path: feeds/{id}/comments
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_COMMENTS_TABLE}
+
+  # Configure UpdateComment function
+  UpdateComment:
+    handler: src/lambda/http/updateComment.handler
+    events:
+      - http:
+          method: patch
+          path: feeds/comments/{id}
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Update an existing comment
+            description: Update an existing comment
+            requestModels:
+              'application/json': UpdateCommentRequest
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_COMMENTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_COMMENTS_TABLE}/index/${self:provider.environment.FEEDITEM_COMMENTS_INDEX_NAME}
+
+  # Configure DeleteComment function
+  DeleteComment:
+    handler: src/lambda/http/deleteComment.handler
+    events:
+      - http:
+          method: delete
+          path: feeds/comments/{id}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_COMMENTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_COMMENTS_TABLE}/index/${self:provider.environment.FEEDITEM_COMMENTS_INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}/index/${self:provider.environment.FEEDITEMS_INDEX_NAME}
+
+  # Configure CreateLike function
+  CreateLike:
+    handler: src/lambda/http/createLike.handler
+    events:
+      - http:
+          method: post
+          path: feeds/likes
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new like
+            description: Create a new like
+            requestModels:
+              'application/json': LikeRequest
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}/index/${self:provider.environment.FEEDITEMS_INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_LIKES_TABLE}
+
+  # Configure GetLikes function
+  GetLikes:
+    handler: src/lambda/http/getLikes.handler
+    events:
+      - http:
+          method: get
+          path: feeds/{id}/likes
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_LIKES_TABLE}
+
+  # Configure DeleteLike function
+  DeleteLike:
+    handler: src/lambda/http/deleteLike.handler
+    events:
+      - http:
+          method: delete
+          path: feeds/likes/{id}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_LIKES_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEM_LIKES_TABLE}/index/${self:provider.environment.FEEDITEM_LIKES_INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDITEMS_TABLE}/index/${self:provider.environment.FEEDITEMS_INDEX_NAME}
+
 resources:
   Resources:
     # AWS resources
@@ -263,6 +439,56 @@ resources:
           - IndexName: ${self:provider.environment.FEEDITEMS_INDEX_NAME}
             KeySchema:
             - AttributeName: feedItemId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    FeedItemLikesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: feedItemId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+          - AttributeName: likeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: feedItemId
+            KeyType: HASH
+          - AttributeName: createdAt
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.FEEDITEM_LIKES_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.FEEDITEM_LIKES_INDEX_NAME}
+            KeySchema:
+            - AttributeName: likeId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    FeedItemCommentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: feedItemId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+          - AttributeName: commentId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: feedItemId
+            KeyType: HASH
+          - AttributeName: createdAt
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.FEEDITEM_COMMENTS_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.FEEDITEM_COMMENTS_INDEX_NAME}
+            KeySchema:
+            - AttributeName: commentId
               KeyType: HASH
             Projection:
               ProjectionType: ALL
