@@ -785,6 +785,618 @@
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "/feeds/comments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1a4dd3d0-ca58-4dac-9ed6-fc96d1339d6d",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The count is equal to the number of items rx\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.count).to.eql(jsonData.rows.length);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 600ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(600);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/:id/comments",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										":id",
+										"comments"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "90090c92-dc90-4d00-9353-f025d34516fb"
+										}
+									]
+								},
+								"description": "Get all the comments of a feed item"
+							},
+							"response": []
+						},
+						{
+							"name": "/feeds/comment post",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "bde79567-08d3-4c27-b0f3-0a4461fcabdb",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"feedItemId\": \"90090c92-dc90-4d00-9353-f025d34516fb\",\r\n    \"commentText\": \"Yes, the size matter safety\",\r\n    \"user\": {\r\n        \"createdAt\": \"2020-11-11T22:38:45.562Z\",\r\n        \"email\": \"hello@gmail.com\",\r\n        \"name\": \"hello\",\r\n        \"userId\": \"9d68070a-92e0-4e86-84d6-d57594806759\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/comments",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										"comments"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Create a new comment on a feed item"
+							},
+							"response": [
+								{
+									"name": "/api/v0/feed/:id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/v0/feed/:id",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v0",
+												"feed",
+												":id"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "4",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "133"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 26 Mar 2019 15:07:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "/feeds/comments/:id - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/comments/:id",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										"comments",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "30a43899-d8d0-4be3-bf22-5192d5d322f9"
+										}
+									]
+								},
+								"description": "Delete a specific comment"
+							},
+							"response": []
+						},
+						{
+							"name": "/feeds/comments/:id patch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "921990a2-4869-4027-8ceb-022eeb3e704a",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"A single item is returned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.not.eql(null);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"commentText\": \"Sure, the size matter safety.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/comments/:id",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										"comments",
+										":id"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"type": "string",
+											"value": "3e91335a-6238-4b99-a483-d2d00063863e"
+										}
+									]
+								},
+								"description": "Update a specific comment"
+							},
+							"response": [
+								{
+									"name": "/api/v0/feed/:id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/v0/feed/:id",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v0",
+												"feed",
+												":id"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "4",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "133"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 26 Mar 2019 15:07:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
+								}
+							]
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Likes",
+					"item": [
+						{
+							"name": "/feeds/likes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3085b80c-b25b-4948-9b05-1a18958050dc",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The count is equal to the number of items rx\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.count).to.eql(jsonData.rows.length);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 600ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(600);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/:id/likes",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										":id",
+										"likes"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "90090c92-dc90-4d00-9353-f025d34516fb"
+										}
+									]
+								},
+								"description": "Get all the likes of a feed item"
+							},
+							"response": []
+						},
+						{
+							"name": "/feeds/likes post",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8e9039ca-ba7d-4e04-a34a-eed357785844",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"feedItemId\": \"90090c92-dc90-4d00-9353-f025d34516fb\",\r\n    \"user\": {\r\n        \"createdAt\": \"2020-11-11T22:38:45.562Z\",\r\n        \"email\": \"hello@gmail.com\",\r\n        \"name\": \"hello\",\r\n        \"userId\": \"9d68070a-92e0-4e86-84d6-d57594806759\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/likes",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										"likes"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Create a new like on a feed item"
+							},
+							"response": [
+								{
+									"name": "/api/v0/feed/:id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/v0/feed/:id",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"v0",
+												"feed",
+												":id"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "4",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "133"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 26 Mar 2019 15:07:32 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "/feeds/likes/:id - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{appId}}.execute-api.eu-central-1.amazonaws.com/dev/feeds/likes/:id",
+									"protocol": "https",
+									"host": [
+										"{{appId}}",
+										"execute-api",
+										"eu-central-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"feeds",
+										"likes",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "bb938f97-4914-4e19-bc10-1aa4a54dc8b8"
+										}
+									]
+								},
+								"description": "Delete a specific like"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -814,12 +1426,12 @@
 	],
 	"variable": [
 		{
-			"id": "f25b5da5-8223-4476-93f6-66501cb046f1",
+			"id": "68a817b3-058e-442f-8850-d6320d01a55f",
 			"key": "appId",
 			"value": "48y1ovuyfh"
 		},
 		{
-			"id": "df35bfc5-293b-4f0f-8730-f44b3e341dc7",
+			"id": "95be893d-05d8-40f4-a9d1-d9529ac0637a",
 			"key": "token",
 			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsInBhc3N3b3JkX2hhc2giOiIkMmIkMTAkNElrejRmTGV0N2NnYlUwbmtMMmhJT1J5RDhTeElFdXFDQTNJajltekZsUXZBcEQwY3g2eU8iLCJjcmVhdGVkQXQiOiIyMDIwLTA5LTE4VDAxOjM3OjQwLjI3M1oiLCJ1cGRhdGVkQXQiOiIyMDIwLTA5LTE4VDAxOjM3OjQwLjI3NFoiLCJpYXQiOjE2MDAzOTY5NTh9.SD18h4vXbkfzvdug4WDGwBOqIOakTw29wZe3eT-KDaE"
 		}
