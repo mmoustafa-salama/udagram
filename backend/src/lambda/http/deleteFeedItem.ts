@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import { deleteFeedItemById } from '../../businessLogic/feeds';
 import { createLogger } from '../../utils/logger';
 
-const logger = createLogger('deleteTodo');
+const logger = createLogger('deleteFeedItem');
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const feedItemId = event.pathParameters.id;
