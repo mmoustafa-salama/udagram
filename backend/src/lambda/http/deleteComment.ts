@@ -1,39 +1,39 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { deleteFeedItemById } from '../../businessLogic/feeds';
+import { deleteCommentById } from '../../businessLogic/feeds';
 import { createLogger } from '../../utils/logger';
 
-const logger = createLogger('deleteFeedItem');
+const logger = createLogger('deleteComment');
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const feedItemId = event.pathParameters.id;
-  if (!feedItemId) {
+  const commentId = event.pathParameters.id;
+  if (!commentId) {
     return {
       statusCode: 400,
       headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
-        error: `Feed item ID is reeuired.`
+        error: `Comment ID is reeuired.`
       })
     };
   }
 
-  logger.info(`Removing a feed item with the Id '${feedItemId}' ...`);
+  logger.info(`Removing a comment with the Id '${commentId}' ...`);
 
-  // Remove a Feed item by id
-  if (await deleteFeedItemById(feedItemId) !== true) {
+  // Remove a comment by id
+  if (await deleteCommentById(commentId) !== true) {
 
-    logger.error(`No feed item with the Id '${feedItemId}' exist`);
+    logger.error(`No comment with the Id '${commentId}' exist`);
 
     return {
       statusCode: 404,
       headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
-        error: `No feed item with the Id '${feedItemId}' exist`
+        error: `No comment with the Id '${commentId}' exist`
       })
     };
   }
 
-  logger.info(`Feed item with the Id '${feedItemId}' removed sucessfully`);
+  logger.info(`Comment with the Id '${commentId}' removed sucessfully`);
 
   return {
     statusCode: 200,

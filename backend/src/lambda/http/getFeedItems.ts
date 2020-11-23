@@ -4,7 +4,7 @@ import { getUserId } from '../utils';
 import { getAllFeedItems } from '../../businessLogic/feeds';
 import { createLogger } from '../../utils/logger';
 
-const logger = createLogger('getTodo');
+const logger = createLogger('getFeedItem');
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 

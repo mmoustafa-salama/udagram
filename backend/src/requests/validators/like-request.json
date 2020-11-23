@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "like",
+  "type": "object",
+  "properties": {
+    "feedItemId": {
+      "type": "string",
+      "pattern": "^(?!\\s*$).+",
+      "maxLength": 128
+    },
+    "user": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "feedItemId"
+  ],
+  "additionalProperties": false
+}

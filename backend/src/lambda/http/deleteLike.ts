@@ -1,39 +1,39 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { deleteFeedItemById } from '../../businessLogic/feeds';
+import { deleteLikeById } from '../../businessLogic/feeds';
 import { createLogger } from '../../utils/logger';
 
-const logger = createLogger('deleteFeedItem');
+const logger = createLogger('deleteLike');
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const feedItemId = event.pathParameters.id;
-  if (!feedItemId) {
+  const likeId = event.pathParameters.id;
+  if (!likeId) {
     return {
       statusCode: 400,
       headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
-        error: `Feed item ID is reeuired.`
+        error: `Like ID is reeuired.`
       })
     };
   }
 
-  logger.info(`Removing a feed item with the Id '${feedItemId}' ...`);
+  logger.info(`Removing a like with the Id '${likeId}' ...`);
 
-  // Remove a Feed item by id
-  if (await deleteFeedItemById(feedItemId) !== true) {
+  // Remove a like by id
+  if (await deleteLikeById(likeId) !== true) {
 
-    logger.error(`No feed item with the Id '${feedItemId}' exist`);
+    logger.error(`No like with the Id '${likeId}' exist`);
 
     return {
       statusCode: 404,
       headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
-        error: `No feed item with the Id '${feedItemId}' exist`
+        error: `No like with the Id '${likeId}' exist`
       })
     };
   }
 
-  logger.info(`Feed item with the Id '${feedItemId}' removed sucessfully`);
+  logger.info(`Like with the Id '${likeId}' removed sucessfully`);
 
   return {
     statusCode: 200,

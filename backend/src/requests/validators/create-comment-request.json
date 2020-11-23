@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "create-comment",
+  "type": "object",
+  "properties": {
+    "feedItemId": {
+      "type": "string",
+      "pattern": "^(?!\\s*$).+",
+      "maxLength": 128
+    },
+    "commentText": {
+      "type": "string",
+      "pattern": "^(?!\\s*$).+",
+      "maxLength": 2000
+    },
+    "user": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "feedItemId",
+    "commentText"
+  ],
+  "additionalProperties": false
+}
