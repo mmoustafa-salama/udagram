@@ -7,11 +7,15 @@ import { Comment } from "../models/Comment";
 import { CommentDataAccess } from "../dataAccess/commentAccess";
 import { CreateCommentRequest } from "../requests/CreateCommentRequest";
 import { UpdateCommentRequest } from "../requests/UpdateCommentRequest";
+import { LikeDataAccess } from "../dataAccess/likeAccess";
+import { LikeRequest } from "../requests/LikeRequest";
+import { Like } from "../models/Like";
 
 const uuid = require('uuid');
 const feedItemAccess = new FeedDataAccess();
 const commentAccess = new CommentDataAccess();
 const imageAccess = new ImageDataAccess();
+const likeAccess = new LikeDataAccess();
 
 export async function getAllFeedItems(userId: string): Promise<FeedItem[]> {
     var items = await feedItemAccess.getAllFeedItems(userId);
@@ -130,4 +134,53 @@ export async function deleteCommentById(commentId): Promise<boolean> {
         }
     }
     return false;
+}
+
+export async function createLike(userId: string, likeRequest: LikeRequest): Promise<FeedItem> {
+
+    const feedItem = await feedItemAccess.getFeedItemById(likeRequest.feedItemId);
+    if (feedItem) {
+        const dateTimeNow = new Date().toISOString();
+        // Add like
+        const like: Like = {
+            userId: userId,
+            likeId: uuid.v4(),
+            createdAt: dateTimeNow,
+            ...likeRequest
+        };
+        await likeAccess.createLike(like);
+
+        // Update likes count
+
+        feedItem.likesCount += 1;
+        feedItem.updatedAt = dateTimeNow;
+        return await feedItemAccess.updateFeedItem(feedItem);
+    }
+
+    return feedItem;
+}
+
+export async function deleteLikeById(likeId): Promise<boolean> {
+
+    // Get like
+    const like = await likeAccess.getLikeById(likeId);
+    if (like) {
+        // Delete like
+        await likeAccess.deleteLike(like);
+
+        const feedItem = await feedItemAccess.getFeedItemById(like.feedItemId);
+        if (feedItem) {
+            // Update likes count
+            feedItem.likesCount -= 1;
+            feedItem.updatedAt = new Date().toISOString();;
+            await feedItemAccess.updateFeedItem(feedItem);
+
+            return true;
+        }
+    }
+    return false;
+}
+
+export async function getAllLikes(feedItemId: string): Promise<Like[]> {
+    return await likeAccess.getAllLikes(feedItemId);
 }
