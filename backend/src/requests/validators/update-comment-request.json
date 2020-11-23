@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "update-comment",
+  "type": "object",
+  "properties": {
+    "commentText": {
+      "type": "string",
+      "pattern": "^(?!\\s*$).+",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "commentText"
+  ],
+  "additionalProperties": false
+}
